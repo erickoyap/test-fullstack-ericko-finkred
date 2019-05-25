@@ -18,6 +18,11 @@ const sequelizeSession = new Sequelize(
     }
 );
 sequelizeSession.sync();
+var sessionStore = new SequelizeStore({
+    db: sequelizeSession,
+    expiration: 60*60*1000 // in milliseconds
+});
+sessionStore.sync();
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -25,13 +30,18 @@ const port = process.env.PORT || 3001;
 app.use(cookieParser());
 app.use(session({
     secret: 'Ericko Yaputro',
-    store: new SequelizeStore({
-        db: sequelizeSession,
-        expiration: 60*60*1000 // in milliseconds
-    }),
+    store: sessionStore,
+    // saveUninitialized: false,
+    key: 'Session Key Ericko Yaputro',
+    name: 'Session Ericko Yaputro',
+    rolling: true,
     resave: false,
     proxy: true,
+    activeDuration: 10*60*1000,
+    ephemeral:true,
+    cookieName: 'Session EY',
     cookie: {
+        httpOnly: true,
         expires: 600000,
         secure: false
     }
@@ -58,7 +68,11 @@ app.use(function (req, res, next) {
 });
 
 var sessionChecker = function(req, res, next){
-    // console.log(req.session);
+    console.log(req.session);
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+
+    // TODO: session always refreshes, don't know what to do.
+
     // if (req.session.email && req.cookies.email) {
     //     next();
     // } else {
