@@ -58,16 +58,17 @@ app.use(function (req, res, next) {
 });
 
 var sessionChecker = function(req, res, next){
-    console.log(req.session);
-    if (req.session.email && req.cookies.email) {
-        next();
-    } else {
-        res.write(JSON.stringify({
-            message: "You have to login first",
-            command: 'REDIRECT_TO_LOGIN'
-        }));
-        res.end();
-    }
+    // console.log(req.session);
+    // if (req.session.email && req.cookies.email) {
+    //     next();
+    // } else {
+    //     res.write(JSON.stringify({
+    //         message: "You have to login first",
+    //         command: 'REDIRECT_TO_LOGIN'
+    //     }));
+    //     res.end();
+    // }
+    next();
 };
 
 // routing

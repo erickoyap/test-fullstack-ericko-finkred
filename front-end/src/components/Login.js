@@ -52,8 +52,8 @@ class Login extends React.Component {
             });
 
             alert(output.message);
-            if (output.success) {
-                window.location = 'user/list';
+            if (output.result === 'success') {
+                window.location = '/user/list';
             }
         });
     }
